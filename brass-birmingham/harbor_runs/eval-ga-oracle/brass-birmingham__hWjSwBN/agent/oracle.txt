@@ -1,0 +1,54 @@
+[GA Reference Policy] Loaded brass_ppo_best.pt (350,418 params | algo=genetic_algorithm | gen=40 | champ_avg=131.5 VP)
+  [Step  1 | CANAL Rd  1] -> [11] Network birmingham-oxford (£3) [discard #2: iron]
+  [Step  2 | CANAL Rd  2] -> [ 2] Build Birmingham: iron L1 (£6) [card #3: Birmingham]
+  [Step  3 | CANAL Rd  2] -> [12] Network oxford-redditch (£3) [discard #0: Walsall]
+  [Step  4 | CANAL Rd  3] -> [12] Network gloucester-redditch (£3) [discard #0: Burton-on-Trent]
+  [Step  5 | CANAL Rd  3] -> [16] Loan +£30 (-3 income tiers) [discard #0: Wolverhampton]
+  [Step  6 | CANAL Rd  4] -> [14] Network gloucester-worcester (£3) [discard #7: pottery]
+  [Step  7 | CANAL Rd  4] -> [ 0] Build Worcester: cotton L1 (£12) [card #3: Worcester]
+  [Step  8 | CANAL Rd  5] -> [14] Sell 1x (Worcester cotton L1) [discard #4: Worcester]
+  [Step  9 | CANAL Rd  5] -> [ 1] Build Redditch: iron L2 (£7) [card #6: iron]
+  [Step 10 | CANAL Rd  6] -> [ 9] Network birmingham-dudley (£3) [discard #5: Birmingham]
+  [Step 11 | CANAL Rd  6] -> [ 8] Network birmingham-tamworth (£3) [discard #0: Cannock]
+  [Step 12 | CANAL Rd  7] -> [ 1] Build Tamworth: coal L1 (£5) [card #2: Tamworth]
+  [Step 13 | CANAL Rd  7] -> [ 9] Network nuneaton-tamworth (£3) [discard #6: Birmingham]
+  [Step 14 | CANAL Rd  8] -> [ 5] Build Nuneaton: brewery L1 (£5) [card #4: brewery]
+  [Step 15 | CANAL Rd  8] -> [ 5] Network burton-tamworth (£3) [discard #0: Wolverhampton]
+  [Step 16 | CANAL Rd  9] -> [ 0] Build Stafford: brewery L1 (£5) [card #1: Stafford]
+  [Step 17 | CANAL Rd  9] -> [12] Loan +£30 (-3 income tiers) [discard #1: Kidderminster]
+  [Step 18 | CANAL Rd 10] -> [ 0] Build Kidderminster: cotton L1 (£12) [card #1: Kidderminster]
+  [Step 19 | CANAL Rd 10] -> [10] Sell 1x (Kidderminster cotton L1) [discard #0: Coalbrookdale]
+  [Step 20 | RAIL  Rd  1] -> [ 2] Build Coalbrookdale: brewery L2 (£7) [card #3: Coalbrookdale]
+  [Step 21 | RAIL  Rd  1] -> [ 4] Network 2x rail: gloucester-redditch + gloucester-worcester (£17, +1 beer) [discard #4: pottery]
+  [Step 22 | RAIL  Rd  2] -> [ 6] Network oxford-redditch (£7) [discard #6: Coalbrookdale]
+  [Step 23 | RAIL  Rd  2] -> [ 5] Loan +£30 (-3 income tiers) [discard #6: Worcester]
+  [Step 24 | RAIL  Rd  3] -> [ 7] Network 2x rail: birmingham-oxford + birmingham-redditch (£15, +1 beer) [discard #7: pottery]
+  [Step 25 | RAIL  Rd  3] -> [ 0] Build Birmingham: iron L3 (£9) [card #0: iron]
+  [Step 26 | RAIL  Rd  4] -> [10] Network coalbrookdale-shrewsbury (£7) [discard #5: iron]
+  [Step 27 | RAIL  Rd  4] -> [ 8] Network coalbrookdale-kidderminster (£8) [discard #1: Walsall]
+  [Step 28 | RAIL  Rd  5] -> [ 0] Build Coalbrookdale: coal L2 (£7) [card #7: coal]
+  [Step 29 | RAIL  Rd  5] -> [ 6] Network coalbrookdale-wolverhampton (£8) [discard #1: Wolverhampton]
+  [Step 30 | RAIL  Rd  6] -> [11] Network walsall-wolverhampton (£5) [discard #2: Wolverhampton]
+  [Step 31 | RAIL  Rd  6] -> [12] Network tamworth-walsall (£9) [discard #6: Birmingham]
+  [Step 32 | RAIL  Rd  7] -> [ 1] Build Coalbrookdale: iron L4 (£17) [card #6: iron]
+  [Step 33 | RAIL  Rd  7] -> [ 5] Network cannock-walsall (£10) [discard #6: Kidderminster]
+  [Step 34 | RAIL  Rd  8] -> [ 0] Build Cannock: coal L2 (£7) [card #5: Cannock]
+  [Step 35 | RAIL  Rd  8] -> [ 4] Network burton-cannock (£9) [discard #2: Coventry]
+  [Step 36 | RAIL  Rd  9] -> [ 0] Build Burton-on-Trent: brewery L2 (£7) [card #0: brewery]
+  [Step 37 | RAIL  Rd  9] -> [ 1] Build Coalbrookdale: brewery L3 (£9) (overbuild) [card #0: brewery]
+  [Step 38 | RAIL  Rd 10] -> [ 0] Build Burton-on-Trent: brewery L3 (£9) (overbuild) [card #0: brewery]
+  [Step 39 | RAIL  Rd 10] -> [ 1] Build Coalbrookdale: brewery L4 (£9) (overbuild) [card #0: brewery]
+
+==============================================================================
+BRASS: BIRMINGHAM — VICTORY! (Steps played: 39 | Harbor Score: 0.8497)
+==============================================================================
+Economy   : Cash £7 (spent £0 this round) | Income +£17/rd (space 51) | Deck 0 cards
+Markets   : Coal £7 (1 cubes) | Iron £1 (10 cubes) | Beer: 2 yours + 1 merchant
+Scoreboard: Banked VP: You 135 vs Mautoma 127 | Board Era Projection: +32 tile VP +42 link VP (1 unflipped / 10 VP pending)
+Merchants : shrewsbury:cotton(beer=1) | gloucester:goods(beer=0) | oxford:any(beer=0)
+Player Mat: cotton:L1(9 left) | goods:L1(11 left) | pottery:L1(5 left) | coal:L3(4 left) | iron:empty | brewery:empty
+Your Tiles: burton:brewery L3[FLIPPED], cannock:coal L2[FLIPPED], coalbrookdale:brewery L4[unflipped(res=2)], coalbrookdale:iron L4[FLIPPED], coalbrookdale:coal L2[FLIPPED], birmingham:iron L3[FLIPPED], redditch:iron L2[FLIPPED]
+Your Links (12): birmingham-oxford, oxford-redditch, gloucester-redditch, gloucester-worcester, cannock-walsall, coalbrookdale-kidderminster, walsall-wolverhampton, birmingham-redditch, burton-cannock, coalbrookdale-shrewsbury, coalbrookdale-wolverhampton, tamworth-walsall
+Recent Log: You scored 3 VP for link walsall-wolverhampton. || Era scoring: You +32 VP from industries, Automa +49 VP. || Final: you 135 VP — Automa 127 VP. You win!
+------------------------------------------------------------------------------
+FINAL HARBOR SCORE PREVIEW: 0.8497 (Completion=0.100 + VP=0.495 + VsMautoma=0.255)

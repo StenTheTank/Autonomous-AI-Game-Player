@@ -1,0 +1,54 @@
+{
+    "schema_version": 1,
+    "id": "3525739d-e9d2-44ef-80cf-263314db0340",
+    "started_at": "2026-11-15T06:32:26.050295",
+    "updated_at": "2026-11-15T06:47:56.227866",
+    "finished_at": "2026-11-15T06:47:56.227866",
+    "n_total_trials": 3,
+    "stats": {
+        "n_completed_trials": 3,
+        "n_errored_trials": 3,
+        "n_running_trials": 0,
+        "n_pending_trials": 0,
+        "n_cancelled_trials": 0,
+        "n_retries": 0,
+        "evals": {
+            "opencode__google/gemini-3.8-flash__adhoc": {
+                "n_trials": 3,
+                "n_errors": 3,
+                "metrics": [
+                    {
+                        "mean": 0.39007600000000003
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "0.022894": [
+                            "brass-birmingham__cuwDBFR"
+                        ],
+                        "0.634667": [
+                            "brass-birmingham__8UWFHdK"
+                        ],
+                        "0.512667": [
+                            "brass-birmingham__6YNc7UP"
+                        ]
+                    }
+                },
+                "exception_stats": {
+                    "AgentTimeoutError": [
+                        "brass-birmingham__cuwDBFR"
+                    ],
+                    "NonZeroAgentExitCodeError": [
+                        "brass-birmingham__8UWFHdK",
+                        "brass-birmingham__6YNc7UP"
+                    ]
+                }
+            }
+        },
+        "n_input_tokens": 17976350,
+        "n_cache_tokens": 17097468,
+        "n_output_tokens": 59296,
+        "cost_usd": 2.753147849999999
+    }
+}

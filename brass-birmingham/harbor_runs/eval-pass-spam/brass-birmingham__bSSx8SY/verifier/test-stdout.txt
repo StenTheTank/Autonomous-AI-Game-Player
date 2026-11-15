@@ -1,0 +1,14 @@
+========================================================================
+BRASS: BIRMINGHAM CLEAN-ROOM REPLAY VERIFIER — FULL MATCH COMPLETED (LOSS/TIE)
+========================================================================
+Seed / Difficulty   : 202611 (easy)
+Valid Steps Replayed: 39 / 39 submitted (Passes: 26 | Game Over: True)
+Final Scoreboard    : Agent 0 VP vs. Mautoma 129 VP (Margin: -129 VP)
+Empire Footprint    : 0 flipped tiles, 0 links, £0 cash
+------------------------------------------------------------------------
+  1. Completion Credit (0.00 - 0.10): 0.0000
+  2. Empire VP Credit  (0.00 - 0.55): 0.0000
+  3. Vs Mautoma Credit (0.00 - 0.35): 0.0000
+------------------------------------------------------------------------
+FINAL HARBOR REWARD : 0.000000  --> written to /logs/verifier/reward.txt
+========================================================================

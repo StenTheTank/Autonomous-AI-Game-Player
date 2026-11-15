@@ -1,0 +1,147 @@
+{
+  "model_architecture": {
+    "name": "BrassActorCritic",
+    "state_dim": 288,
+    "action_dim": 48,
+    "hidden_dim": 256,
+    "total_parameters": 350418,
+    "actor_evolved_parameters": 317393
+  },
+  "single_pass_6seed_heldout_ablation": {
+    "seeds": [202611, 1001, 1002, 1003, 1004, 1005],
+    "random_init_zero_prior": {
+      "seed_202611_vp": 97,
+      "mean_6seed_vp": 24.3,
+      "win_rate_pct": 0.0,
+      "mean_harbor_reward": 0.1482
+    },
+    "untrained_warm_prior_gen0": {
+      "seed_202611_vp": 110,
+      "mean_6seed_vp": 90.0,
+      "win_rate_pct": 0.0,
+      "mean_harbor_reward": 0.5326
+    },
+    "ppo_post_trained_600ep": {
+      "seed_202611_vp": 96,
+      "mean_600ep_vp": 54.1,
+      "win_rate_pct": 0.0,
+      "zero_vp_collapse_rate_pct": 21.0
+    },
+    "ga_evolved_40gen_self_play": {
+      "seed_202611_vp": 135,
+      "seed_202611_automa_vp": 127,
+      "seed_202611_harbor_reward": 0.849667,
+      "mean_6seed_vp": 138.0,
+      "win_rate_pct": 33.3,
+      "mean_harbor_reward": 0.7997,
+      "zero_vp_collapse_rate_pct": 0.0
+    }
+  },
+  "ppo_baseline_600_episodes": [
+    {
+      "run_id": "24b48f4a",
+      "episodes": 200,
+      "mean_vp": 60.12,
+      "max_vp": 132,
+      "min_vp": 0,
+      "zero_vp_collapses": 40
+    },
+    {
+      "run_id": "b9bde04d",
+      "episodes": 160,
+      "mean_vp": 48.21,
+      "max_vp": 108,
+      "min_vp": 0,
+      "zero_vp_collapses": 29
+    },
+    {
+      "run_id": "fdf22be0",
+      "episodes": 100,
+      "mean_vp": 57.43,
+      "max_vp": 119,
+      "min_vp": 0,
+      "zero_vp_collapses": 20
+    },
+    {
+      "run_id": "a0c358c5",
+      "episodes": 100,
+      "mean_vp": 54.84,
+      "max_vp": 137,
+      "min_vp": 0,
+      "zero_vp_collapses": 28
+    },
+    {
+      "run_id": "e4295d68",
+      "episodes": 24,
+      "mean_vp": 45.58,
+      "max_vp": 90,
+      "min_vp": 0,
+      "zero_vp_collapses": 5
+    },
+    {
+      "run_id": "7f63825d",
+      "episodes": 16,
+      "mean_vp": 36.44,
+      "max_vp": 89,
+      "min_vp": 0,
+      "zero_vp_collapses": 4
+    }
+  ],
+  "ga_self_play_40_generations": {
+    "run_id": "ga_1794704737_0d8258",
+    "generations": 40,
+    "total_matches": 480,
+    "gen1_pop_mean_vp": 56.79,
+    "gen39_peak_pop_mean_vp": 131.08,
+    "gen40_pop_mean_vp": 118.54,
+    "gen1_champion_vp": 104.5,
+    "peak_champion_vp": 145.5,
+    "zero_vp_collapses": 0
+  },
+  "ga_solo_mautoma_10_generations": {
+    "run_id": "ga_1794703233_eb408f",
+    "generations": 10,
+    "gen1_pop_mean_vp": 93.17,
+    "gen10_pop_mean_vp": 121.83,
+    "peak_single_game_vp": 167,
+    "zero_vp_collapses": 0
+  },
+  "head_to_head_vs_frontier_llms_seed_202611": [
+    {
+      "match": "GA Gen-40 vs claude-sonnet-5-5 (#1)",
+      "ga_vp": 135,
+      "llm_vp": 91,
+      "winner": "GA-317K"
+    },
+    {
+      "match": "GA Gen-40 vs claude-sonnet-5-5 (#2)",
+      "ga_vp": 141,
+      "llm_vp": 46,
+      "winner": "GA-317K"
+    },
+    {
+      "match": "Pre-GA PPO vs claude-sonnet-5-5 (#3)",
+      "ppo_vp": 73,
+      "llm_vp": 77,
+      "winner": "claude-sonnet-5-5"
+    },
+    {
+      "match": "Pre-GA PPO vs gemini-3.8-flash (#1)",
+      "ppo_vp": 127,
+      "llm_vp": 109,
+      "winner": "PPO-317K"
+    },
+    {
+      "match": "Pre-GA PPO vs gemini-3.8-flash (#2)",
+      "ppo_vp": 86,
+      "llm_vp": 84,
+      "winner": "PPO-317K"
+    },
+    {
+      "match": "Pre-GA PPO vs gemini-3.8-flash (#3)",
+      "ppo_vp": 0,
+      "llm_vp": 26,
+      "winner": "gemini-3.8-flash (PPO 0-VP collapse)"
+    }
+  ]
+}

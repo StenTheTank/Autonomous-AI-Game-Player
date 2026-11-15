@@ -1,0 +1,32 @@
+# OS & Editor
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Node & TypeScript
+node_modules/
+*.tsbuildinfo
+
+# Secrets & Local Runtime DBs
+.env
+.env.local
+.env.*.local
+ai-game-player/backend/ai_game_player.db
+ai-game-player/backend/ai_game_player.db-wal
+ai-game-player/backend/ai_game_player.db-shm
+
+# Harbor Archives & Internal OpenCode Snapshots (Windows MAX_PATH)
+dist.tar.gz
+**/agent/opencode/xdg-data/opencode/snapshot/
+**/agent/opencode/xdg-data/opencode/opencode.db*

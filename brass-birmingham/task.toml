@@ -1,0 +1,49 @@
+schema_version = "1.4"
+artifacts = [
+    "/app/trajectory.jsonl",
+]
+
+[task]
+name = "junction/brass-birmingham"
+version = "1.0.0"
+description = "Play a full 20-round economic strategy match of Brass: Birmingham (Canal + Rail Eras) against the Mautoma solo opponent and maximize Victory Points."
+authors = [
+    { name = "Sten Marcus Nelson" },
+]
+keywords = [
+    "reinforcement-learning",
+    "simulation",
+    "economic-strategy",
+    "board-games",
+    "planning",
+    "brass-birmingham",
+]
+
+[metadata]
+category = "games-and-simulation"
+difficulty = "hard"
+difficulty_explanation = "Requires 39 sequential macro-decisions across two eras with coupled coal/iron markets, beer logistics, spatial network topology, tech-tree development, and era-transition obsolescence."
+
+[verifier]
+timeout_sec = 300.0
+environment_mode = "shared"
+collect = []
+
+[verifier.env]
+
+[agent]
+timeout_sec = 900.0
+
+[environment]
+network_mode = "public"
+build_timeout_sec = 900.0
+os = "linux"
+cpus = 2
+memory_mb = 4096
+mcp_servers = []
+
+[environment.env]
+BRASS_EVAL_SEED = "202611"
+BRASS_EVAL_DIFFICULTY = "easy"
+
+[solution.env]

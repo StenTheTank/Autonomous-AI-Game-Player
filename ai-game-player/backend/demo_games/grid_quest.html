@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Crystal Quest — AI Demo Arena</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+    body {
+      width: 1280px;
+      height: 720px;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 20%, #172038, #0b0f1d 75%);
+      color: #f8fafc;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 32px;
+    }
+    .hud {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      border-radius: 14px;
+      padding: 12px 24px;
+    }
+    .hud-title { font-size: 22px; font-weight: 800; letter-spacing: 0.5px; color: #38bdf8; }
+    .hud-stats { display: flex; gap: 28px; font-size: 18px; font-weight: 700; }
+    .stat span { color: #fbbf24; }
+    .arena-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    canvas {
+      border-radius: 16px;
+      border: 2px solid #334155;
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
+      background: #0f172a;
+    }
+    .dpad {
+      display: grid;
+      grid-template-columns: repeat(3, 68px);
+      grid-template-rows: repeat(3, 68px);
+      gap: 8px;
+    }
+    .btn-dir {
+      background: #1e293b;
+      border: 2px solid #475569;
+      color: #e2e8f0;
+      border-radius: 12px;
+      font-size: 24px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-dir:hover, .btn-dir:active { background: #3b82f6; border-color: #60a5fa; color: white; }
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(9, 13, 26, 0.88);
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      text-align: center;
+      padding: 32px;
+    }
+    .overlay.hidden { display: none; }
+    .overlay h1 { font-size: 42px; font-weight: 900; color: #38bdf8; }
+    .overlay p { font-size: 18px; color: #cbd5e1; max-width: 560px; line-height: 1.5; }
+    .cta-btn {
+      margin-top: 8px;
+      padding: 16px 42px;
+      font-size: 22px;
+      font-weight: 800;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(16, 185, 129, 0.45);
+    }
+    .footer-hint {
+      font-size: 15px;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+  <div class="hud">
+    <div class="hud-title">CRYSTAL QUEST ARENA</div>
+    <div class="hud-stats">
+      <div class="stat">Crystals: <span id="crystals">0 / 3</span></div>
+      <div class="stat">Shield HP: <span id="hp">3</span></div>
+      <div class="stat">Moves: <span id="moves">0</span></div>
+      <div class="stat">Portal: <span id="portal-state">LOCKED</span></div>
+    </div>
+  </div>
+
+  <div class="arena-wrap">
+    <div style="position: relative;">
+      <canvas id="board" width="880" height="550"></canvas>
+      <div id="overlay" class="overlay">
+        <h1 id="ov-title">CRYSTAL QUEST</h1>
+        <p id="ov-desc">
+          Move the CYAN ROBOT to collect all 3 GOLD CRYSTALS, avoid RED MINES and GRAY WALLS,
+          then step onto the GREEN PORTAL to win!
+        </p>
+        <button id="start-btn" class="cta-btn">START MISSION (Click or Press Space)</button>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+      <div style="font-size:14px;font-weight:700;color:#94a3b8;letter-spacing:1px;">CLICK D-PAD OR USE KEYS</div>
+      <div class="dpad">
+        <div></div>
+        <button class="btn-dir" onclick="movePlayer(0,-1)">▲</button>
+        <div></div>
+        <button class="btn-dir" onclick="movePlayer(-1,0)">◀</button>
+        <button class="btn-dir" onclick="resetGame()" title="Reset" style="font-size:14px;">RST</button>
+        <button class="btn-dir" onclick="movePlayer(1,0)">▶</button>
+        <div></div>
+        <button class="btn-dir" onclick="movePlayer(0,1)">▼</button>
+        <div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-hint">
+    Controls: Arrow Keys / WASD, Click D-Pad buttons on right, or Click an adjacent grid tile directly.
+  </div>
+
+  <script>
+    const COLS = 8, ROWS = 5, CELL = 110;
+    const canvas = document.getElementById('board');
+    const ctx = canvas.getContext('2d');
+    const overlay = document.getElementById('overlay');
+    const ovTitle = document.getElementById('ov-title');
+    const ovDesc = document.getElementById('ov-desc');
+    const startBtn = document.getElementById('start-btn');
+
+    let state = 'menu'; // menu | playing | won | lost
+    let player = { x: 0, y: 2 };
+    let portal = { x: 7, y: 2 };
+    let walls = [];
+    let mines = [];
+    let crystals = [];
+    let collected = 0;
+    let hp = 3;
+    let moves = 0;
+
+    function initLevel() {
+      player = { x: 0, y: 2 };
+      portal = { x: 7, y: 2 };
+      walls = [
+        { x: 2, y: 1 }, { x: 2, y: 2 },
+        { x: 5, y: 2 }, { x: 5, y: 3 }
+      ];
+      mines = [
+        { x: 3, y: 0 },
+        { x: 4, y: 3 },
+        { x: 6, y: 1 }
+      ];
+      crystals = [
+        { x: 1, y: 0, taken: false },
+        { x: 3, y: 2, taken: false },
+        { x: 6, y: 4, taken: false }
+      ];
+      collected = 0;
+      hp = 3;
+      moves = 0;
+      updateHud();
+      draw();
+    }
+
+    function startGame() {
+      initLevel();
+      state = 'playing';
+      overlay.classList.add('hidden');
+      draw();
+    }
+
+    function resetGame() {
+      startGame();
+    }
+
+    startBtn.addEventListener('click', startGame);
+
+    function hasCoord(list, x, y) {
+      return list.some(item => item.x === x && item.y === y);
+    }
+
+    function movePlayer(dx, dy) {
+      if (state !== 'playing') return;
+      const nx = player.x + dx;
+      const ny = player.y + dy;
+      if (nx < 0 || nx >= COLS || ny < 0 || ny >= ROWS) return;
+      if (hasCoord(walls, nx, ny)) return;
+
+      player.x = nx;
+      player.y = ny;
+      moves++;
+
+      for (const c of crystals) {
+        if (!c.taken && c.x === nx && c.y === ny) {
+          c.taken = true;
+          collected++;
+        }
+      }
+
+      if (hasCoord(mines, nx, ny)) {
+        hp--;
+        if (hp <= 0) {
+          state = 'lost';
+          ovTitle.textContent = 'MISSION FAILED';
+          ovTitle.style.color = '#ef4444';
+          ovDesc.textContent = 'Shield depleted by red laser mines! Click button or press Space to retry.';
+          startBtn.textContent = 'RETRY MISSION';
+          overlay.classList.remove('hidden');
+        }
+      }
+
+      if (collected === crystals.length && nx === portal.x && ny === portal.y && state === 'playing') {
+        state = 'won';
+        ovTitle.textContent = 'VICTORY! MISSION COMPLETE';
+        ovTitle.style.color = '#34d399';
+        ovDesc.textContent = `All 3 crystals extracted in ${moves} moves with ${hp} shield HP remaining!`;
+        startBtn.textContent = 'PLAY AGAIN';
+        overlay.classList.remove('hidden');
+      }
+
+      updateHud();
+      draw();
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (state !== 'playing') {
+        if (e.key === ' ' || e.key === 'Enter') {
+          e.preventDefault();
+          startGame();
+        }
+        return;
+      }
+      const k = e.key.toLowerCase();
+      if (e.key === 'ArrowUp' || k === 'w') { e.preventDefault(); movePlayer(0, -1); }
+      else if (e.key === 'ArrowDown' || k === 's') { e.preventDefault(); movePlayer(0, 1); }
+      else if (e.key === 'ArrowLeft' || k === 'a') { e.preventDefault(); movePlayer(-1, 0); }
+      else if (e.key === 'ArrowRight' || k === 'd') { e.preventDefault(); movePlayer(1, 0); }
+    });
+
+    canvas.addEventListener('click', (e) => {
+      if (state !== 'playing') return;
+      const rect = canvas.getBoundingClientRect();
+      const gx = Math.floor((e.clientX - rect.left) / CELL);
+      const gy = Math.floor((e.clientY - rect.top) / CELL);
+      const dx = gx - player.x;
+      const dy = gy - player.y;
+      if (Math.abs(dx) + Math.abs(dy) === 1) {
+        movePlayer(dx, dy);
+      }
+    });
+
+    function updateHud() {
+      document.getElementById('crystals').textContent = `${collected} / ${crystals.length}`;
+      document.getElementById('hp').textContent = hp;
+      document.getElementById('moves').textContent = moves;
+      const pEl = document.getElementById('portal-state');
+      if (collected === crystals.length) {
+        pEl.textContent = 'OPEN - ENTER GREEN PORTAL!';
+        pEl.style.color = '#34d399';
+      } else {
+        pEl.textContent = 'LOCKED (Need 3 Crystals)';
+        pEl.style.color = '#fbbf24';
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (let y = 0; y < ROWS; y++) {
+        for (let x = 0; x < COLS; x++) {
+          const px = x * CELL, py = y * CELL;
+          ctx.strokeStyle = '#1e293b';
+          ctx.lineWidth = 2;
+          ctx.strokeRect(px, py, CELL, CELL);
+          ctx.fillStyle = '#334155';
+          ctx.font = 'bold 12px monospace';
+          ctx.fillText(`(${x},${y})`, px + 6, py + 16);
+        }
+      }
+
+      // Walls
+      for (const w of walls) {
+        const px = w.x * CELL + 8, py = w.y * CELL + 8;
+        ctx.fillStyle = '#475569';
+        ctx.fillRect(px, py, CELL - 16, CELL - 16);
+        ctx.fillStyle = '#cbd5e1';
+        ctx.font = 'bold 15px sans-serif';
+        ctx.fillText('WALL', px + 24, py + 54);
+      }
+
+      // Mines
+      for (const m of mines) {
+        const cx = m.x * CELL + CELL / 2, cy = m.y * CELL + CELL / 2;
+        ctx.beginPath();
+        ctx.arc(cx, cy, 32, 0, Math.PI * 2);
+        ctx.fillStyle = '#dc2626';
+        ctx.fill();
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 14px sans-serif';
+        ctx.fillText('MINE', cx - 18, cy + 5);
+      }
+
+      // Portal
+      const pcx = portal.x * CELL + CELL / 2, pcy = portal.y * CELL + CELL / 2;
+      ctx.beginPath();
+      ctx.arc(pcx, pcy, 38, 0, Math.PI * 2);
+      ctx.fillStyle = collected === crystals.length ? '#10b981' : '#064e3b';
+      ctx.fill();
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = '#34d399';
+      ctx.stroke();
+      ctx.fillStyle = '#ecfdf5';
+      ctx.font = 'bold 14px sans-serif';
+      ctx.fillText('PORTAL', pcx - 27, pcy + 5);
+
+      // Crystals
+      for (const c of crystals) {
+        if (c.taken) continue;
+        const cx = c.x * CELL + CELL / 2, cy = c.y * CELL + CELL / 2;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy - 34);
+        ctx.lineTo(cx + 28, cy);
+        ctx.lineTo(cx, cy + 34);
+        ctx.lineTo(cx - 28, cy);
+        ctx.closePath();
+        ctx.fillStyle = '#f59e0b';
+        ctx.fill();
+        ctx.strokeStyle = '#fde68a';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+        ctx.fillStyle = '#1e293b';
+        ctx.font = 'bold 12px sans-serif';
+        ctx.fillText('GEM', cx - 14, cy + 4);
+      }
+
+      // Player
+      const plx = player.x * CELL + CELL / 2, ply = player.y * CELL + CELL / 2;
+      ctx.beginPath();
+      ctx.arc(plx, ply, 36, 0, Math.PI * 2);
+      ctx.fillStyle = '#0ea5e9';
+      ctx.fill();
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = '#bae6fd';
+      ctx.stroke();
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 14px sans-serif';
+      ctx.fillText('PLAYER', plx - 27, ply + 5);
+    }
+
+    initLevel();
+  </script>
+</body>
+</html>

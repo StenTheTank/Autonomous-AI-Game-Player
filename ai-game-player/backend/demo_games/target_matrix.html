@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sequence Strike — Mouse Vision Demo</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+    body {
+      width: 1280px;
+      height: 720px;
+      overflow: hidden;
+      background: #0b1120;
+      color: #f8fafc;
+      font-family: system-ui, -apple-system, sans-serif;
+      display: flex;
+      flex-direction: column;
+    }
+    .topbar {
+      height: 76px;
+      background: #111827;
+      border-bottom: 2px solid #1f2937;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 36px;
+    }
+    .title { font-size: 24px; font-weight: 800; color: #a78bfa; }
+    .status { font-size: 20px; font-weight: 700; color: #34d399; }
+    .board {
+      flex: 1;
+      position: relative;
+      background: radial-gradient(circle at center, #131c31, #090d16);
+    }
+    .node {
+      position: absolute;
+      width: 96px;
+      height: 96px;
+      margin-left: -48px;
+      margin-top: -48px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      cursor: pointer;
+      transition: transform 0.12s ease;
+    }
+    .node.target {
+      background: linear-gradient(135deg, #10b981, #047857);
+      border: 4px solid #6ee7b7;
+      box-shadow: 0 0 24px rgba(16, 185, 129, 0.45);
+      font-size: 32px;
+      color: white;
+    }
+    .node.done {
+      background: #1e293b;
+      border: 3px dashed #475569;
+      color: #64748b;
+      font-size: 24px;
+      pointer-events: none;
+    }
+    .node.hazard {
+      background: linear-gradient(135deg, #ef4444, #991b1b);
+      border: 4px solid #fca5a5;
+      font-size: 16px;
+      color: white;
+    }
+    .banner {
+      position: absolute;
+      inset: 0;
+      background: rgba(9, 13, 22, 0.88);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+    .banner.hidden { display: none; }
+    .banner h1 { font-size: 48px; color: #34d399; }
+    .banner button {
+      padding: 16px 38px;
+      font-size: 22px;
+      font-weight: 800;
+      border: none;
+      border-radius: 12px;
+      background: #8b5cf6;
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="title">SEQUENCE STRIKE (Mouse Precision Test)</div>
+    <div class="status" id="prompt">Click GREEN TARGET #1 first! Avoid RED BOMBS.</div>
+  </div>
+  <div class="board" id="board">
+    <div class="banner hidden" id="banner">
+      <h1 id="banner-title">SEQUENCE COMPLETE!</h1>
+      <p id="banner-sub" style="font-size:20px;color:#cbd5e1;">All 5 targets neutralized in sequence!</p>
+      <button onclick="setup()">PLAY AGAIN</button>
+    </div>
+  </div>
+  <script>
+    const TARGETS = [
+      { num: 1, x: 240, y: 180 },
+      { num: 2, x: 980, y: 170 },
+      { num: 3, x: 640, y: 310 },
+      { num: 4, x: 310, y: 470 },
+      { num: 5, x: 960, y: 460 }
+    ];
+    const HAZARDS = [
+      { x: 520, y: 160 },
+      { x: 800, y: 360 }
+    ];
+    let nextNum = 1;
+    const board = document.getElementById('board');
+    const promptEl = document.getElementById('prompt');
+    const banner = document.getElementById('banner');
+
+    function setup() {
+      nextNum = 1;
+      banner.classList.add('hidden');
+      promptEl.textContent = 'NEXT TARGET: Click GREEN CIRCLE #1 (Avoid RED BOMBS)';
+      promptEl.style.color = '#34d399';
+      board.querySelectorAll('.node').forEach(n => n.remove());
+
+      TARGETS.forEach(t => {
+        const el = document.createElement('div');
+        el.className = 'node target';
+        el.style.left = t.x + 'px';
+        el.style.top = t.y + 'px';
+        el.innerHTML = `<span>#${t.num}</span>`;
+        el.onclick = () => {
+          if (t.num === nextNum) {
+            el.className = 'node done';
+            el.innerHTML = '✓';
+            nextNum++;
+            if (nextNum > TARGETS.length) {
+              promptEl.textContent = 'VICTORY! All targets clicked in sequence!';
+              document.getElementById('banner-title').textContent = 'VICTORY! SEQUENCE COMPLETE';
+              document.getElementById('banner-title').style.color = '#34d399';
+              banner.classList.remove('hidden');
+            } else {
+              promptEl.textContent = `Great! Now click GREEN CIRCLE #${nextNum}`;
+            }
+          } else {
+            promptEl.textContent = `Wrong order! Must click GREEN CIRCLE #${nextNum} next!`;
+            promptEl.style.color = '#fbbf24';
+          }
+        };
+        board.appendChild(el);
+      });
+
+      HAZARDS.forEach(h => {
+        const el = document.createElement('div');
+        el.className = 'node hazard';
+        el.style.left = h.x + 'px';
+        el.style.top = h.y + 'px';
+        el.innerHTML = '<span>BOMB</span>';
+        el.onclick = () => {
+          document.getElementById('banner-title').textContent = 'GAME OVER — BOMB TRIGGERED';
+          document.getElementById('banner-title').style.color = '#ef4444';
+          document.getElementById('banner-sub').textContent = 'Clicked a red bomb instead of the green numbered target.';
+          banner.classList.remove('hidden');
+        };
+        board.appendChild(el);
+      });
+    }
+    setup();
+  </script>
+</body>
+</html>

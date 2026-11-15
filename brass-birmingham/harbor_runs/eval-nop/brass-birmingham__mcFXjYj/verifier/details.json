@@ -1,0 +1,10 @@
+{
+  "verified": true,
+  "seed": 202611,
+  "difficulty": "easy",
+  "warnings": [
+    "No moves recorded (/app/trajectory.jsonl)"
+  ],
+  "reward": 0.0,
+  "valid_steps": 0
+}
